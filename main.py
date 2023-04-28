@@ -1,5 +1,13 @@
 from telegram.ext import *
 import keys
+import requests
+import json
+
+# info api IMDB
+url = "https://online-movie-database.p.rapidapi.com/auto-complete"
+
+
+searchTerm = ''
 
 print('Starting up bot ...')
 
@@ -14,12 +22,29 @@ def custom_command(update, context):
     update.message.reply_text('This is a custom command!')
 
 def handle_response(text: str) -> str:
-    if 'hello' in  text:
-        return 'Hey there'
-    if 'how are you' in text:
-        return 'I am good, thanks'
-    else:
-        return 'Idk'
+    split = text.split()
+    searchTerm = split[1]
+    if split[0] == 'search' \
+            and len(searchTerm) > 2:
+        response = requests.get(url, headers=keys.headers, params={"q": searchTerm})
+        data = json.loads(response.text)
+        formattedData = json.dumps(data, indent=4)
+        dataDict = json.loads(formattedData)
+        responses = dataDict["d"]
+        # return 'searching for ' + split[1] + ' ...'
+        for movie in responses:
+            return "Título: " + movie["l"] + "\n" + "Imagem: " + movie["i"]["imageUrl"] + "\n" + \
+                "Tipo: " + movie["qid"] + "Tipo: " + movie["yr"]
+
+        # for movie in responses:
+        #     print("Título: " + movie["l"])
+        #     print("Imagem: " + movie["i"]["imageUrl"])
+        #     print("Tipo: " + movie["qid"])
+        #     print("Ano: " + movie["y"])
+        #     print("Elenco: " + movie["s"])
+
+
+
 def handle_message(update, context):
     message_type = update.message.chat.type
     text = str(update.message.text).lower()
