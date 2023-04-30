@@ -21,7 +21,7 @@ def help_command(update, context):
 def custom_command(update, context):
     update.message.reply_text('This is a custom command!')
 
-def handle_response(text: str) -> str:
+def handle_response(text: str, update) -> str:
     split = text.split()
     searchTerm = split[1]
     if split[0] == 'search' \
@@ -42,13 +42,17 @@ def handle_response(text: str) -> str:
                     info = "Título: " + movie["l"] + "\n" + "Imagem: " + movie["i"]["imageUrl"] + "\n" + "Kind: " + \
                            movie["qid"]
                 movies_info.append(info)
+
             except:
                 pass
 
         if movies_info:
-            return '\n\n'.join(movies_info)
+            for info in movies_info:
+                update.message.reply_text(info)
+                return '\n\n'.join(movies_info)
         else:
             return 'No movies found.'
+
 
 def handle_message(update, context):
     message_type = update.message.chat.type
