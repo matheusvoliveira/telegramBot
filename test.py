@@ -50,15 +50,6 @@ def handle_response(text: str) -> str:
         else:
             return 'No movies found.'
 
-        # for movie in responses:
-        #     print("Título: " + movie["l"])
-        #     print("Imagem: " + movie["i"]["imageUrl"])
-        #     print("Tipo: " + movie["qid"])
-        #     print("Ano: " + movie["y"])
-        #     print("Elenco: " + movie["s"])
-
-
-
 def handle_message(update, context):
     message_type = update.message.chat.type
     text = str(update.message.text).lower()
