@@ -21,11 +21,13 @@ def help_command(update, context):
 def custom_command(update, context):
     update.message.reply_text('This is a custom command!')
 
-def handle_response(text: str, update) -> str:
+def handle_response(text: str) -> str:
     split = text.split()
-    searchTerm = split[1]
-    if split[0] == 'search' \
-            and len(searchTerm) > 2:
+    searchTerm = ''
+    for i in range(1, len(split)):
+        searchTerm += split[i] + ' '
+    searchTerm = searchTerm.rstrip()
+    if split[0] == 'search':
         response = requests.get(url, headers=keys.headers, params={"q": searchTerm})
         data = json.loads(response.text)
         formattedData = json.dumps(data, indent=4)
@@ -42,14 +44,13 @@ def handle_response(text: str, update) -> str:
                     info = "Título: " + movie["l"] + "\n" + "Imagem: " + movie["i"]["imageUrl"] + "\n" + "Kind: " + \
                            movie["qid"]
                 movies_info.append(info)
-
             except:
                 pass
 
         if movies_info:
-            for info in movies_info:
-                update.message.reply_text(info)
-                return '\n\n'.join(movies_info)
+            for x in range(len(movies_info)):
+
+                return movies_info[x]
         else:
             return 'No movies found.'
 
