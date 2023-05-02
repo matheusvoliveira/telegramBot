@@ -37,6 +37,7 @@ def handle_response(text: str) -> str:
         movies_info = []
         for movie in responses:
             try:
+
                 if movie["qid"] == 'tvSeries':
                     info = "Título: " + movie["l"] + "\n" + "Imagem: " + movie["i"]["imageUrl"] + "\n" + "Kind: " + \
                            movie["qid"]
